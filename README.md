@@ -1,6 +1,6 @@
 # AutoRemoveLite
 
-A lightweight Deluge plugin that automatically removes seeding torrents — along with their data — after a configurable period of time.
+A lightweight Deluge plugin that automatically removes seeding torrents after a configurable period of time.
 
 ---
 
@@ -8,16 +8,16 @@ A lightweight Deluge plugin that automatically removes seeding torrents — alon
 
 Existing auto-remove plugins for Deluge are either abandoned, broken on Deluge 2.x / Python 3, or bloated with options most users will never touch. The most common need is straightforward: **automatically delete a torrent and its files after it has been seeding for X hours**, so your download folder doesn't fill up with content you've long forgotten about.
 
-AutoRemoveLite does exactly that — nothing more, nothing less.
+AutoRemoveLite does exactly that, nothing more, nothing less.
 
 ---
 
 ## Features
 
 - Removes completed torrents **along with their downloaded data** once the seed time threshold is reached
-- Runs an automatic check **every hour** in the background — no client needs to be connected
+- Runs an automatic check **every hour** in the background. No client needs to be connected
 - Configured directly from the Deluge **Preferences** panel (web UI)
-- Clean, minimal codebase — easy to audit and maintain
+- Clean, minimal codebase. Easy to audit and maintain
 
 ---
 
@@ -30,11 +30,11 @@ AutoRemoveLite does exactly that — nothing more, nothing less.
 
 ## Installation
 
-### Option A — Download prebuilt egg (recommended)
+### Option A - Download prebuilt egg (recommended)
 
 Download the latest `.egg` file from the [Releases](../../releases/latest) page.
 
-### Option B — Build from source
+### Option B - Build from source
 
 ```bash
 pip install setuptools
