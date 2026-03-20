@@ -1,0 +1,51 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build egg
+        run: |
+          pip install setuptools
+          python setup.py bdist_egg
+
+      - name: Get version
+        id: version
+        run: |
+          VERSION=$(python setup.py --version 2>/dev/null)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "egg=dist/AutoRemoveLite-${VERSION}-py3.12.egg" >> $GITHUB_OUTPUT
+
+      - name: Delete existing latest release
+        run: gh release delete latest --yes --cleanup-tag || true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: v${{ steps.version.outputs.version }}
+          body: |
+            Automatically built from the latest commit on `main`.
+
+            **Installation:** copy the `.egg` file to your Deluge plugins folder, then enable *AutoRemoveLite* in Preferences → Plugins.
+          files: ${{ steps.version.outputs.egg }}
+          make_latest: true
