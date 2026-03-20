@@ -2,9 +2,9 @@ from setuptools import find_packages, setup
 
 setup(
     name="AutoRemoveLite",
-    version="1.0.0",
+    version="1.0.2",
     description="Removes torrents with data after a configurable seed time.",
-    author="balin",
+    author="szajbergyerek",
     packages=find_packages(),
     package_data={"autoremovelite": ["data/*.js"]},
     entry_points={
@@ -12,7 +12,7 @@ setup(
             "AutoRemoveLite = autoremovelite:CorePlugin",
         ],
         "deluge.plugin.web": [
-            "AutoRemoveLite = autoremovelite:WebPlugin",
+            "AutoRemoveLite = autoremovelite:WebUIPlugin",
         ],
     },
 )

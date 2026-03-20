@@ -1,14 +1,15 @@
-Ext.ns('Deluge.plugins.AutoRemoveLite');
+Ext.ns('Deluge.ux.preferences');
 
-Deluge.plugins.AutoRemoveLite.PreferencesPage = Ext.extend(Ext.Panel, {
+Deluge.ux.preferences.AutoRemoveLitePage = Ext.extend(Ext.Panel, {
     title: _('AutoRemoveLite'),
+    header: false,
     layout: 'form',
     border: false,
     bodyStyle: 'padding: 10px',
     autoHeight: true,
 
     initComponent: function () {
-        Deluge.plugins.AutoRemoveLite.PreferencesPage.superclass.initComponent.call(this);
+        Deluge.ux.preferences.AutoRemoveLitePage.superclass.initComponent.call(this);
 
         this.add({
             xtype: 'label',
@@ -20,24 +21,24 @@ Deluge.plugins.AutoRemoveLite.PreferencesPage = Ext.extend(Ext.Panel, {
             new Ext.form.NumberField({
                 fieldLabel: _('Seed time (hours)'),
                 name: 'seed_time',
-                value: 72,
+                value: 720,
                 minValue: 1,
                 maxValue: 8760,
                 allowDecimals: false,
                 width: 100
             })
         );
+
+        this.on('show', this.onPreferencesShow, this);
     },
 
     onApply: function () {
-        var config = {
+        deluge.client.autoremovelite.set_config({
             seed_time: this.seedTime.getValue()
-        };
-        deluge.client.autoremovelite.set_config(config);
+        });
     },
 
-    onShow: function () {
-        Deluge.plugins.AutoRemoveLite.PreferencesPage.superclass.onShow.call(this);
+    onPreferencesShow: function () {
         deluge.client.autoremovelite.get_config({
             success: function (config) {
                 this.seedTime.setValue(config['seed_time']);
@@ -47,18 +48,25 @@ Deluge.plugins.AutoRemoveLite.PreferencesPage = Ext.extend(Ext.Panel, {
     }
 });
 
-Deluge.plugins.AutoRemoveLite.Plugin = Ext.extend(Deluge.Plugin, {
+Deluge.plugins.AutoRemoveLitePlugin = Ext.extend(Deluge.Plugin, {
     name: 'AutoRemoveLite',
 
+    static: {
+        prefsPage: null,
+    },
+
     onEnable: function () {
-        this.prefsPage = Deluge.Preferences.addPage(
-            new Deluge.plugins.AutoRemoveLite.PreferencesPage()
-        );
+        if (!Deluge.plugins.AutoRemoveLitePlugin.prefsPage) {
+            Deluge.plugins.AutoRemoveLitePlugin.prefsPage = deluge.preferences.addPage(
+                new Deluge.ux.preferences.AutoRemoveLitePage()
+            );
+        }
     },
 
     onDisable: function () {
-        Deluge.Preferences.removePage(this.prefsPage);
+        deluge.preferences.removePage(Deluge.plugins.AutoRemoveLitePlugin.prefsPage);
+        Deluge.plugins.AutoRemoveLitePlugin.prefsPage = null;
     }
 });
 
-Deluge.registerPlugin('AutoRemoveLite', Deluge.plugins.AutoRemoveLite.Plugin);
+Deluge.registerPlugin('AutoRemoveLite', Deluge.plugins.AutoRemoveLitePlugin);

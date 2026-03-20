@@ -1,5 +1,13 @@
 from deluge.plugins.pluginbase import WebPluginBase
 
+from .common import get_resource
+
 
 class WebUI(WebPluginBase):
-    scripts = ["data/autoremovelite.js"]
+    scripts = [get_resource("autoremovelite.js")]
+
+    def enable(self):
+        pass
+
+    def disable(self):
+        pass

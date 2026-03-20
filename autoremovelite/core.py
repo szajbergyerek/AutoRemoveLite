@@ -9,7 +9,7 @@ from twisted.internet import task
 log = logging.getLogger(__name__)
 
 DEFAULT_PREFS = {
-    "seed_time": 72,
+    "seed_time": 720,
 }
 
 CHECK_INTERVAL_SECONDS = 3600
